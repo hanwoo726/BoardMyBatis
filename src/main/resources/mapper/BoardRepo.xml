@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lec.spring.repository.BoardRepository">
+
+    <select id="boardList" flushCache="true" resultType="com.lec.spring.domain.Board">
+        select * from board
+        ORDER BY id DESC
+    </select>
+
+    <select id="users" flushCache="true" resultType="java.lang.Integer">
+        select  u.id from user u
+        JOIN board b ON u.id = b.userId
+    </select>
+
+
+
+
+    <insert id="write" flushCache="true" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into board( name, subject, content)
+        VALUES ( #{name}, #{subject}, #{content})
+
+    </insert>
+
+    <insert id="commentWrite" flushCache="true" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into comment(id, comment)
+        VALUES (#{id} ,#{comment})
+    </insert>
+
+<!--  해당 게시글 id 값을 이용해 상세보기 페이지 구현 로직  -->
+    <select flushCache="true"  id="findById" resultType="com.lec.spring.domain.Board">
+        select b.id ,b.name , b.subject, b.content, b.regdate, b.view
+        from board b
+        where b.id = #{id}
+    </select>
+
+    <update id="incrementView">
+        update board
+        set view = view + 1
+        where id = #{id}
+    </update>
+
+    <update id="updateBoard">
+        update board
+        set subject = #{subject}, content = #{content}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBoard">
+        delete from board
+        where id = #{id}
+    </delete>
+
+
+</mapper>

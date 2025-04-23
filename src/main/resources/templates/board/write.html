@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="/js/write.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>게시글 작성</h2>
+    <form th:action="@{/board/save}" method="post">
+        <!-- 제목 입력 -->
+        <div class="form-group">
+            <label for="subject">제목</label>
+            <input type="text" class="form-control" id="subject" name="subject" placeholder="제목을 입력하세요" required>
+        </div>
+
+        <!-- 내용 입력 -->
+        <div class="form-group">
+            <label for="content">내용</label>
+            <textarea class="form-control" id="content" name="content" rows="5" placeholder="내용을 입력하세요" required></textarea>
+        </div>
+
+        <!-- 글쓴이 입력 -->
+        <div class="form-group">
+            <label for="name">글쓴이</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="글쓴이를 입력하세요" th:value="${user.userID}" readonly>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <button type="submit" class="btn btn-primary" id="write">게시글 작성</button>
+        <div class="text-right ">
+            <a th:href="@{/board/list}" class="btn btn-danger">취소</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lec.spring.repository.CommentRepository">
+
+    <select id="findByBid" flushCache="true" resultMap="commentResultMap">
+        SELECT c.commentId,
+               c.id AS cid,
+               c.comment,
+               c.regdate,
+               c.userId,
+               u.id AS uid,
+               u.userID as username,
+               b.id AS boardId,
+               b.subject
+        FROM comment c
+                 JOIN user u ON u.id = c.userId
+                 JOIN board b ON b.id = c.id
+        WHERE c.id = #{id}
+        LIMIT #{limit} OFFSET #{offset}
+
+    </select>
+
+    <resultMap id="commentResultMap" type="com.lec.spring.domain.Comment">
+        <result property="commentId" column="commentId"/>
+        <result property="comment" column="comment"/>
+        <result property="regdate" column="regdate"/>
+        <result property="userId" column="userId"/>
+
+        <!-- User 객체 매핑 -->
+        <association property="user" javaType="com.lec.spring.domain.User">
+            <result property="id" column="uid"/>
+            <result property="userID" column="username"/>
+        </association>
+
+        <!-- Board 객체 매핑 -->
+        <association property="board" javaType="com.lec.spring.domain.Board">
+            <result property="id" column="boardId"/>
+            <result property="subject" column="subject"/>
+        </association>
+    </resultMap>
+
+        <!-- 보드의 게시판 기준으로 댓글 카운트 수   -->
+    <select id="countComment" flushCache="true">
+        select COUNT(*) from comment
+        where id = #{id}
+    </select>
+
+
+    <insert id="writeComment" flushCache="true" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into comment (id, userId,comment, regdate)
+        VALUES (#{id}, #{userId}, #{comment}, NOW())
+    </insert>
+
+    <select id="findById" flushCache="true" resultMap="commentResultMap">
+        select c.id AS cid, c.comment, c.regdate, u.userID
+            from comment c
+            JOIN user u ON c.userId = u.id
+        where id = #{id}
+    </select>
+
+    <select id="allComment" flushCache="true" resultMap="commentResultMap">
+        SELECT c.comment, c.regdate, b.id, u.userID from comment c
+        JOIN board b ON b.id = c.id
+        JOIN user u ON  c.userId = u.id
+
+    </select>
+
+</mapper>
