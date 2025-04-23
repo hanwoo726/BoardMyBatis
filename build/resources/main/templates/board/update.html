@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="/js/write.js"></script>
+    <link rel="stylesheet" href="/static/css/update.css">
+</head>
+<body>
+<!-- 컨테이너로 페이지를 감싸서 중앙정렬 및 패딩 추가 -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4">게시판 상세보기</h2>
+
+    <!-- 게시판 상세 내용 카드 -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-center">게시글 상세</h3>
+        </div>
+        <div class="card-body content-box">
+            <!-- 글 ID, 이름, 조회수, 작성일 -->
+            <p><strong>ID:</strong> <span th:text="${update.id}"></span></p>
+            <p><strong>이름:</strong> <span th:text="${update.name}"></span></p>
+
+            <!-- 글 내용 -->
+            <h3>내용</h3>
+            <form th:action="@{/board/updateOk}" method="post">
+                <input type="hidden" name="id" th:value="${update.id}"></input>
+            <textarea th:text="${update.subject}"  name="subject" class="form-control" rows="2" style="border-bottom: none;"></textarea> <br>
+            <textarea th:text="${update.content}"  name="content" class="form-control border-primary" rows="7" style="border-bottom: none;"> </textarea>
+            <br><br><br><br>
+            <div class="d-flex justify-content-between">
+                <!--     Jquery 방식으로 해당 값을 Post방식으로 보내고 list로 이동 시키키           -->
+                <button th:onclick="|window.location.href='/board/detail/' + ${update.id};|"  id= "delete" class="btn btn-secondary">이전으로</button>
+                <button type="submit" class="btn btn-primary"> 작성완료</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
